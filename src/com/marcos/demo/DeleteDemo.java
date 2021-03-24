@@ -2,12 +2,11 @@ package com.marcos.demo;
 
 import entity.Instructor;
 import entity.InstructorDetail;
-import entity.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class CreateDemo
+public class DeleteDemo
 {
     public static void main(String[] args)
     {
@@ -21,12 +20,23 @@ public class CreateDemo
 
         try
         {
-            Instructor tempInstructor = new Instructor("Craig", "Smith", "craigS@gmail.com");
-            InstructorDetail tempInstructorDetail = new InstructorDetail("youtube.com/craigSomething", "Computer hacking skills");
-            tempInstructor.setInstructorDetail(tempInstructorDetail);
-
             session.beginTransaction();
-            session.save(tempInstructor);
+            int theId = 2;
+            Instructor tempInstructor = session.get(Instructor.class, theId);
+
+            System.out.println("Found instructor " + tempInstructor);
+
+            if(tempInstructor != null)
+            {
+                System.out.println("Deleting " + tempInstructor);
+//                Deletion of this instructor will also delete instructor detail for this instructor as well
+//                CASACADE.ALL is selected for the instructor currently
+                session.delete(tempInstructor);
+            }
+            else
+            {
+                System.out.println("instructor was not found...");
+            }
 
             session.getTransaction().commit();
         }
